@@ -1,0 +1,17 @@
+
+@server_port = {{$dotenv SERVER_PORT}}
+
+###
+GET http://localhost:{{server_port}}/company
+
+
+###
+POST http://localhost:{{server_port}}/company
+Content-Type: application/json
+
+{
+    "name": "Nicthur Tech",
+    "email": "nicthur@tech.com",
+    "password": "18052004",
+    "category": "Tecnologies"
+}

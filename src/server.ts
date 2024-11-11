@@ -1,18 +1,17 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import { json } from "express";
 import { Request, Response } from "express";
-import { CompanyRouter } from "./routes/company.ts";
-import { EmployeeRouter } from "./routes/employee.ts";
-import { NotificationRouter } from "./routes/notification.ts";
-import { ProductRouter } from "./routes/product.ts";
-import { ReportRouter } from "./routes/report.ts";
-import { TransactionRouter } from "./routes/transaction.ts";
-import { VirtualStockRouter } from "./routes/virtualStock.ts";
-
-// import { router } from "./router.js";
+import { CompanyRouter } from "./controllers/company.ts";
+import { EmployeeRouter } from "./controllers/employee.ts";
+import { NotificationRouter } from "./controllers/notification.ts";
+import { ProductRouter } from "./controllers/product.ts";
+import { ReportRouter } from "./controllers/report.ts";
+import { TransactionRouter } from "./controllers/transaction.ts";
+import { VirtualStockRouter } from "./controllers/virtualStock.ts";
+import "dotenv/config";
+import { Prisma } from "@prisma/client";
 
 const server = express();
-
 server.use(json())
 
 server.get("/", (request: Request, response: Response) => {
@@ -29,6 +28,6 @@ server.use("/report", ReportRouter);
 server.use("/transaction", TransactionRouter);
 server.use("/virtualStock", VirtualStockRouter);
 
-server.listen(3333, () => {
-  console.log("tô aqui. tô vivo.");
+server.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server is running on port: ${process.env.SERVER_PORT} \nAccess the server here: http://localhost:${process.env.SERVER_PORT}`)
 });
