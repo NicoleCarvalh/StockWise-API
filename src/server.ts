@@ -1,4 +1,4 @@
-import express, { NextFunction } from "express";
+import express from "express";
 import { json } from "express";
 import { Request, Response } from "express";
 import { CompanyRouter } from "./controllers/company.ts";
@@ -9,16 +9,17 @@ import { ReportRouter } from "./controllers/report.ts";
 import { TransactionRouter } from "./controllers/transaction.ts";
 import { VirtualStockRouter } from "./controllers/virtualStock.ts";
 import "dotenv/config";
-import { Prisma } from "@prisma/client";
+import { routerGuardHandler } from "./_auth/routerGuard.ts";
 
 const server = express();
 server.use(json())
+
+server.use(routerGuardHandler)
 
 server.get("/", (request: Request, response: Response) => {
   response.json("Hello, api with express").status(200);
 });
 
-// server.use(router);
 server.use("/notification", NotificationRouter);
 server.use("/company", CompanyRouter);
 server.use("/employee", EmployeeRouter);
