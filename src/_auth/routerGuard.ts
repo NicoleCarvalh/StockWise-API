@@ -10,12 +10,15 @@ function routerGuardHandler(request: Request, response: Response, next: NextFunc
     ]
 
     if(free_paths?.includes(request.path) ?? false) {
-        if(!(request.path == "/company" && request.method == 'POST')) {
+        if(request.path == "/company" && request.method == 'POST') {
+            console.log("Parou aqui")
             return
-        } else {
-            next()
+        } else if(request.path == "/company" && request.method == 'POST') {
             return
         }
+
+        next()
+        return
     }
 
     const authorizationHeader = request.headers?.authorization ?? ""
