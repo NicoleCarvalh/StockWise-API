@@ -2,16 +2,14 @@
 @server_port = {{$dotenv SERVER_PORT}}
 
 ###
-GET http://localhost:{{server_port}}/company
-
-
-###
-POST http://localhost:{{server_port}}/company
+POST http://localhost:{{server_port}}/company/validate
 Content-Type: application/json
 
 {
-    "name": "Nicthur Tech",
-    "email": "nicthur@tech.com",
-    "password": "18052004",
-    "category": "Tecnologies"
+    "email": "nicthur.s@gmail.com",
+    "password": "18052004"
 }
+
+###
+DELETE http://localhost:{{server_port}}/company
+Authorization: Bearded eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MzI0OWI3NzJmZjFmNzY4NTJhZWZkOCIsImlhdCI6MTczMTQ0MDIxMCwiZXhwIjoxNzMxNDQzODEwfQ.OOzRa6TQu8gUGvCSpeuqU1_MtHj8_sjAEmug__fMqLY

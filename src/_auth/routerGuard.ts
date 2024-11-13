@@ -5,12 +5,17 @@ import { CompanyService } from "../services/company.ts";
 function routerGuardHandler(request: Request, response: Response, next: NextFunction) {
     const free_paths = [
         '/',
-        '/company/validate'
+        '/company/validate',
+        '/company',
     ]
 
     if(free_paths?.includes(request.path) ?? false) {
-        next()
-        return
+        if(!(request.path == "/company" && request.method == 'POST')) {
+            return
+        } else {
+            next()
+            return
+        }
     }
 
     const authorizationHeader = request.headers?.authorization ?? ""

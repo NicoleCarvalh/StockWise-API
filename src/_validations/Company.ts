@@ -59,4 +59,25 @@ const CompanyCredentialsValidator = z.object({
     }).min(8, {message: "Must be 8 or more characters long"}),
 })
 
-export {CompanyObjectValidator, CompanyUpdateDataValidator}
+const CompanyFormDataValidator = z.object({
+    name: z.string({
+        required_error: "Name is required!",
+        invalid_type_error: "Name must be string!"
+    }).trim(),
+    email: z.string({
+        required_error: "Email is required!",
+        invalid_type_error: "Email must be string!"
+    }).email({message: "Invalid email address!"}),
+    password: z.string({
+        required_error: "Password is required!",
+        invalid_type_error: "Password must be string!"
+    }).min(8, {message: "Must be 8 or more characters long"}),
+    category: z.string({
+        invalid_type_error: "Category must be string!"
+    }),
+    image: z.any().optional()
+})
+
+type CompanyFormDataType = z.infer<typeof CompanyFormDataValidator>
+
+export {CompanyObjectValidator, CompanyUpdateDataValidator, CompanyCredentialsValidator, CompanyFormDataValidator, CompanyFormDataType}

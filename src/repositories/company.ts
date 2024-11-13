@@ -22,6 +22,12 @@ abstract class CompanyRepository {
     }})
   }
 
+  static getByEmail(email: string) {
+    return CompanyRepository.prismaClient.findUnique({where: {
+      email
+    }})
+  }
+
   static getById(id: string) {
     return CompanyRepository.prismaClient.findUnique({where: {
       id

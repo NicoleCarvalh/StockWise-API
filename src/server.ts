@@ -10,8 +10,16 @@ import { TransactionRouter } from "./controllers/transaction.ts";
 import { VirtualStockRouter } from "./controllers/virtualStock.ts";
 import "dotenv/config";
 import { routerGuardHandler } from "./_auth/routerGuard.ts";
+import cors from "cors"
 
 const server = express();
+// const whitelist = ['http://localhost:5173', 'http://192.168.18.15:5173']
+const corsOptions = {
+  origin: ["http://localhost:5173"]
+}
+
+server.use(cors(corsOptions))
+
 server.use(json())
 
 server.use(routerGuardHandler)
