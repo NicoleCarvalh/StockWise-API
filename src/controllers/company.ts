@@ -1,8 +1,7 @@
-import { Company } from "@prisma/client";
 import { Request, Response } from "express";
 import { Router } from "express";
 import { CompanyService } from "../services/company.ts";
-import { CompanyUpdateDataValidator, CompanyObjectValidator, CompanyCredentialsValidator, CompanyFormDataValidator, CompanyFormDataType } from "../_validations/Company.ts";
+import { CompanyUpdateDataValidator, CompanyCredentialsValidator, CompanyFormDataValidator, CompanyFormDataType } from "../_validations/Company.ts";
 import { signToken } from "../_auth/jwt.ts";
 import { formFileMapper } from "../_utils/multer.ts";
 
@@ -41,7 +40,19 @@ async function getCompanyByCredentials(request: Request, response: Response) {
 
 function putCompany(request: Request, response: Response) {
   const companyId = response.locals.companyId
-  const companyNewData = request.body
+  let companyNewData = request.body
+
+  if(request?.file) {
+    companyNewData["image"] = request.file
+
+    const validations = CompanyFormDataValidator.safeParse(companyNewData)
+    if(!validations.success) {
+      response.status(400).json(...validations.error.issues)
+      return
+    }
+    
+    response.status(200).json(CompanyService.update(companyId, companyNewData));
+  }
 
   const validations = CompanyUpdateDataValidator.safeParse(companyNewData)
   if(!validations.success) {
@@ -73,7 +84,7 @@ async function deleteCompany(request: Request, response: Response) {
 
 CompanyRouter.get("/", getCompanies);
 CompanyRouter.post("/validate", getCompanyByCredentials);
-CompanyRouter.put("/", putCompany);
+CompanyRouter.put("/", formFileMapper.single("image"), putCompany);
 CompanyRouter.post("/", formFileMapper.single("image") ,postCompany);
 CompanyRouter.delete("/", deleteCompany);
 

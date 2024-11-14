@@ -7,7 +7,7 @@ const uploadCompanyPhoto = async (fileName: string, file: any) => {
         contentType: file.mimetype
     })
 
-    return data
+    return data ?? error
 }
 
 const getPublicCompanyPhotoUrl = (fileName: string) => {
@@ -17,4 +17,10 @@ const getPublicCompanyPhotoUrl = (fileName: string) => {
       .getPublicUrl(`company/${fileName}`)?.data?.publicUrl
 }
 
-export { uploadCompanyPhoto, getPublicCompanyPhotoUrl }
+const updateCompanyPhoto = async (currentFileName: string, newFile: any) => {
+    const {data, error} = await supabase.storage.from("stock_images").update(currentFileName, newFile.buffer, {upsert: true})
+
+    return data ?? error
+}
+
+export { uploadCompanyPhoto, getPublicCompanyPhotoUrl, updateCompanyPhoto}

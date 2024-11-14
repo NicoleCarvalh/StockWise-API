@@ -1,7 +1,7 @@
 import { Company } from "@prisma/client"
 import { CompanyRepository } from "../repositories/company.ts"
 import { CompanyFormDataType } from "../_validations/Company.ts"
-import { getPublicCompanyPhotoUrl, uploadCompanyPhoto } from "../_utils/supabase.ts"
+import { getPublicCompanyPhotoUrl, updateCompanyPhoto, uploadCompanyPhoto } from "../_utils/supabase.ts"
 
 type CompanyReceivedDTO = Omit<Company, 'id'>
 type CompanyFormDataReceivedDTO = CompanyFormDataType
@@ -96,8 +96,27 @@ abstract class CompanyService {
     return result
   }
 
-  static update(id: string, newData: CompanyReceivedDTO) {
-    const result = CompanyService.repository.update(id,newData).then(data => data).catch(error => error)
+  static async update(id: string, newData: CompanyFormDataReceivedDTO) {
+    let result;
+    const foundCompany = await CompanyService.getById(id)
+
+    if(newData?.image) {
+      const allwedFileExtensions = [".jpg", ".png", ".jpeg"]
+      const founfCompanyImageExtension = allwedFileExtensions.filter(extension => foundCompany?.image?.originalname?.includes(extension))[0]
+      
+      const foundCompanyImageName = id.concat(founfCompanyImageExtension)
+
+      await updateCompanyPhoto(foundCompanyImageName, newData.image)
+
+      const newCompanyImageName = allwedFileExtensions.filter(extension => newData?.image?.originalname?.includes(extension))[0]
+      const companyPublicUrl = getPublicCompanyPhotoUrl(newCompanyImageName)
+
+      const {image, ...newCompanyDataFiltered} = newData
+      result = await CompanyService.repository.update(id, {...newCompanyDataFiltered, photoUrl: companyPublicUrl})
+    }
+
+    const {image, ...newCompanyDataFiltered} = newData
+    result = CompanyService.repository.update(id, {...newCompanyDataFiltered, photoUrl: null}).then(data => data).catch(error => error)
     
     if("error" in result) {
       return {
