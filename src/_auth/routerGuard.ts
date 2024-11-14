@@ -11,9 +11,9 @@ function routerGuardHandler(request: Request, response: Response, next: NextFunc
 
     if(free_paths?.includes(request.path) ?? false) {
         if(request.path == "/company" && request.method == 'POST') {
-            console.log("Parou aqui")
+            next()
             return
-        } else if(request.path == "/company" && request.method == 'POST') {
+        } else if(request.path == "/company" && request.method != 'POST') {
             return
         }
 
