@@ -9,8 +9,7 @@ const ProductFormDataValidator = z.object({
     }).trim(),
     description: z.string({
         invalid_type_error: "Description must be string!"
-    }).trim().optional(),
-    qrcode: z.any().optional(),
+    }).trim().optional().transform(value => value == undefined ? null : value),
     category: z.string({
         required_error: "Category is required!",
         invalid_type_error: "Category must be string!"
@@ -31,8 +30,8 @@ const ProductFormDataValidator = z.object({
         required_error: "Supplier is required!",
         invalid_type_error: "Supplier must be string!"
     }),
-    image: z.any().optional(),
-    technicalDetails: z.any().optional(),
+    image: z.any().optional().transform(value => value == undefined ? null : value),
+    technicalDetails: z.any().optional().transform(value => value == undefined ? null : value),
     quantityInStock: z.number({
         required_error: "Quantity in stock is required!",
         invalid_type_error: "Quantity in stock must be a number!",
