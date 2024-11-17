@@ -8,40 +8,40 @@ abstract class CompanyRepository {
   constructor() {}
 
   static create(company: CompanyDTO) {
-    return CompanyRepository.prismaClient.create({data: company})
+    return this.prismaClient.create({data: company})
   }
 
   static getAll() {
-    return CompanyRepository.prismaClient.findMany()
+    return this.prismaClient.findMany()
   }
 
   static getByEmailAndPassword(email: string, password: string) {
-    return CompanyRepository.prismaClient.findUnique({where: {
+    return this.prismaClient.findUnique({where: {
       email,
       password
     }})
   }
 
   static getByEmail(email: string) {
-    return CompanyRepository.prismaClient.findUnique({where: {
+    return this.prismaClient.findUnique({where: {
       email
     }})
   }
 
   static getById(id: string) {
-    return CompanyRepository.prismaClient.findUnique({where: {
+    return this.prismaClient.findUnique({where: {
       id
     }})
   }
 
   static update(id: string, newData: CompanyDTO) {
-    return CompanyRepository.prismaClient.update({where: {
+    return this.prismaClient.update({where: {
       id
     }, data: newData})
   }
 
   static delete(id: string) {
-    return CompanyRepository.prismaClient.delete({where: {id}})
+    return this.prismaClient.delete({where: {id}})
   }
 }
 

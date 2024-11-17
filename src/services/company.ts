@@ -16,7 +16,7 @@ abstract class CompanyService {
     const {image, ...companyWithoutImage} = company // remove image key (selecting it and split in a variable) and create separete the other keys on 'companyWithoutImage'
     const companyFomated: CompanyReceivedDTO = {...companyWithoutImage, photoUrl: null}
 
-    const companyFound = await CompanyService.repository.getByEmail(companyFomated.email)
+    const companyFound = await this.repository.getByEmail(companyFomated.email)
     const companyExists = companyFound != null
 
     if(companyExists) {
@@ -26,7 +26,7 @@ abstract class CompanyService {
       } 
     }
 
-    result = await CompanyService.repository.create(companyFomated).then(data => data).catch(error => error)
+    result = await this.repository.create(companyFomated).then(data => data).catch(error => error)
 
     if("error" in result) {
       return {
@@ -35,9 +35,9 @@ abstract class CompanyService {
       }
     }
 
-    if(company?.image) {
-      const allwedFileExtensions = [".jpg", ".png", ".jpeg"]
-      const companyImageExtension = allwedFileExtensions.filter(extension => company?.image?.originalname?.includes(extension))[0]
+    if(image) {
+      const allowedFileExtensions = [".jpg", ".png", ".jpeg"]
+      const companyImageExtension = allowedFileExtensions.filter(extension => company?.image?.originalname?.includes(extension))[0]
       
       const companyImageName = result.id.concat(companyImageExtension)
 
@@ -46,14 +46,14 @@ abstract class CompanyService {
       const companyPublicUrl = getPublicCompanyPhotoUrl(companyImageName)
 
       const {id, ...newCompanyData} = result
-      result = await CompanyService.repository.update(result.id, {...newCompanyData, photoUrl: companyPublicUrl})
+      result = await this.repository.update(result.id, {...newCompanyData, photoUrl: companyPublicUrl})
     }
 
     return result
   }
 
   static getAll() {
-    const result = CompanyService.repository.getAll().then(data => data).catch(error => error)
+    const result = this.repository.getAll().then(data => data).catch(error => error)
     
     if("error" in result) {
       return {
@@ -66,7 +66,7 @@ abstract class CompanyService {
   }
 
   static getByEmailAndPassword(email: string, password: string) {
-    const result = CompanyService.repository.getByEmailAndPassword(
+    const result = this.repository.getByEmailAndPassword(
       email,
       password
     ).then(data => data).catch(error => error)
@@ -82,7 +82,7 @@ abstract class CompanyService {
   }
 
   static getById(id: string) {
-    const result = CompanyService.repository.getById(
+    const result = this.repository.getById(
       id
     ).then(data => data).catch(error => error)
     
@@ -98,7 +98,7 @@ abstract class CompanyService {
 
   static async update(id: string, newData: CompanyFormDataReceivedDTO) {
     let result;
-    const foundCompany = await CompanyService.getById(id)
+    const foundCompany = await this.getById(id)
 
     if(newData?.image) {
       const allwedFileExtensions = [".jpg", ".png", ".jpeg"]
@@ -112,11 +112,11 @@ abstract class CompanyService {
       const companyPublicUrl = getPublicCompanyPhotoUrl(newCompanyImageName)
 
       const {image, ...newCompanyDataFiltered} = newData
-      result = await CompanyService.repository.update(id, {...newCompanyDataFiltered, photoUrl: companyPublicUrl})
+      result = await this.repository.update(id, {...newCompanyDataFiltered, photoUrl: companyPublicUrl})
     }
 
     const {image, ...newCompanyDataFiltered} = newData
-    result = CompanyService.repository.update(id, {...newCompanyDataFiltered, photoUrl: null}).then(data => data).catch(error => error)
+    result = this.repository.update(id, {...newCompanyDataFiltered, photoUrl: null}).then(data => data).catch(error => error)
     
     if("error" in result) {
       return {
@@ -129,7 +129,7 @@ abstract class CompanyService {
   }
 
   static delete(id: string) {
-    const result = CompanyService.repository.delete(
+    const result = this.repository.delete(
       id
     ).then(data => data).catch(error => error)
     

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Router } from 'express'
 import { ProductFormDataType, ProductFormDataValidator } from "../_validations/Product.ts";
 import { formFileMapper } from "../_utils/multer.ts";
+import { ProductService } from "../services/product.ts";
 
 const ProductRouter = Router()
 
@@ -13,7 +14,7 @@ function putProduct(request: Request, response: Response) {
   response.json("Rota de teste com o método PUT");
 }
 
-function postProduct(request: Request, response: Response) {
+async function postProduct(request: Request, response: Response) {
   const companyId = response.locals.companyId
   const receivedData = request.body
   const productFormData: ProductFormDataType = {
@@ -21,11 +22,14 @@ function postProduct(request: Request, response: Response) {
     purchasePrice: Number.parseFloat(receivedData.purchasePrice),
     salePrice: Number.parseFloat(receivedData.salePrice),
     quantityInStock: Number.parseInt(receivedData.quantityInStock),
-    technicalDetails: JSON.parse(receivedData?.technicalDetails ?? { width: null, height: null, length: null, weigh: null })
+    technicalDetails: { 
+      width: JSON.parse(receivedData?.technicalDetails)?.width ?? 0, 
+      height: JSON.parse(receivedData?.technicalDetails)?.height ?? 0, 
+      length: JSON.parse(receivedData?.technicalDetails)?.length ?? 0,
+      weigh: JSON.parse(receivedData?.technicalDetails)?.weigh ?? 0 
+    },
+    image: request.file
   }
-
-  console.log(productFormData)
-  console.log(request.file)
 
   const validations = ProductFormDataValidator.safeParse(productFormData)
   if(!validations.success) {
@@ -33,8 +37,7 @@ function postProduct(request: Request, response: Response) {
     return
   }
 
-
-  response.json("Rota de teste com o método POST");
+  response.status(200).json(await ProductService.create(companyId, productFormData));
 }
 
 function deleteProduct(request: Request, response: Response) {
