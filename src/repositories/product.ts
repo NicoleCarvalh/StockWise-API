@@ -13,16 +13,19 @@ abstract class ProductRepository {
     return ProductRepository.prismaClient.create({data: product})
   }
 
-  static getAll(code?: string) {
-    if(code) {
-      return ProductRepository.prismaClient.findFirst({where: {code}})
-    } else {
-      return ProductRepository.prismaClient.findMany()
-    }
+  static getAll(companyId: string) {
+    return ProductRepository.prismaClient.findMany({where: {
+      companyId
+    }, include: {
+      company: true
+    }})
   }
 
-  static getByCode(code: string) {
-    return ProductRepository.prismaClient.findFirst({where: {code}})
+  static getByCode(code: string, companyId: string) {
+    return ProductRepository.prismaClient.findMany({where: {
+      companyId,
+      code
+    }})
   }
 
   static getById(id: string) {

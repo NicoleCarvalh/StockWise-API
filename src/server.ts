@@ -19,7 +19,7 @@ const server = express();
 //   origin: ["http://localhost:5173", "http://192.168.0.11:5173"]
 // }
 
-const whitelist = ['http://192.168.0.11:5173', 'http://localhost:5173']
+const whitelist = ['http://192.168.18.15:5173', 'http://localhost:5173']
 const corsOptions = {
   origin: function (origin: any, callback: any) {
     if (whitelist.indexOf(origin) !== -1) {

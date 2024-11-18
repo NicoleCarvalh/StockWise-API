@@ -35,8 +35,8 @@ abstract class ProductService {
           photoUrl: null, 
 
           companyId,
-          transactionId: null, 
-          virtualStockId: null
+          transactionsIds: [],
+          virtualStocksIds: []
         }
 
         result = await this.repository.create(productToSave)
@@ -64,11 +64,11 @@ abstract class ProductService {
         return result
     }
 
-    static async getAll(code?: any) {
+    static async getAll(companyId: string, code?: any) {
         if(code) {
-            return await this.repository.getAll(code)
+            return await this.repository.getByCode(code, companyId)
         } else {
-            return await this.repository.getAll()
+            return await this.repository.getAll(companyId)
         }
     }
 

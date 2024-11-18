@@ -42,7 +42,7 @@ const CompanyUpdateDataValidator = z.object({
         invalid_type_error: "Category must be string!"
     }).optional(),
     photoUrl: z.string({
-        invalid_type_error: "Category must be string!"
+        invalid_type_error: "Photo url must be string!"
     }).url({
         message: "Invalid url!"
     }).optional()
