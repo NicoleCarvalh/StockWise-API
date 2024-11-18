@@ -2,10 +2,11 @@ import QRCode from "qrcode"
 
 async function qrCodeFileGenerator(id: string) {
     const url = await QRCode.toDataURL(id, {
-        width: 100,
+        width: 200,
         margin: 2,
         color: {
-            dark: "#00cc74"
+            dark: "#00cc74",
+            light: "#1f1f1f"
         }
     })
 

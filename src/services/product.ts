@@ -4,10 +4,12 @@ import { ProductRepository } from "../repositories/product.ts"
 import { qrCodeFileGenerator } from "../_utils/qrcode.ts";
 import { codeGenerator } from "../_utils/stringGenerator.ts";
 import { InputJsonValue } from "@prisma/client/runtime/library";
-import { getPublicProductPhotoUrl, uploadProductImages } from "../_utils/supabase.ts";
+import { getPublicProductPhotoUrl, updateProductPhoto, uploadProductImages } from "../_utils/supabase.ts";
 
 type ProductReceivedDTO = Omit<Product, 'id'> & { technicalDetails: InputJsonValue }
-type ProductFormDataReceivedDTO = ProductFormDataType
+type ProductFormDataReceivedDTO = Omit<ProductFormDataType, 'companyId'>
+type ProductUpdateReceivedDTO = Omit<Product, 'companyId'> & { technicalDetails: InputJsonValue, image?:any }
+
 
 abstract class ProductService {
     static repository = ProductRepository
@@ -74,12 +76,60 @@ abstract class ProductService {
 
     }
 
-    static async update(id: string, newData: ProductFormDataReceivedDTO) {
+    static async update(productId: string, newData: ProductUpdateReceivedDTO) {
+        let result;
+        const foundProduct = await this.repository.getById(productId)
 
+        const {id, companyId, image, ...cleanProductToSave} = {
+            ...foundProduct,
+            ...newData
+        }
+      
+        const productToSave: Omit<ProductUpdateReceivedDTO, 'id'>  = {
+            ...cleanProductToSave,
+            updatedAt: new Date()
+        }
+
+        console.log("newData?.image")
+        console.log(newData?.image)
+
+        console.log("cleanProductToSave.photoUrl")
+        console.log(foundProduct?.photoUrl)
+
+
+        if(newData?.image && foundProduct?.photoUrl != null) {
+            const allowedFileExtensions = [".jpg", ".png", ".jpeg"]
+            const productImageExtension = allowedFileExtensions.filter(extension => newData?.image?.originalname?.includes(extension))[0]
+
+            const productImageName = 'photo_'.concat(productToSave.code.replace("#", ''), productImageExtension)
+      
+            await updateProductPhoto(productImageName, newData?.image).then(data => data).catch(error => console.log(error))
+      
+            const productPublicUrl = getPublicProductPhotoUrl(productImageName)
+      
+            result = await this.repository.update(productId, {...productToSave, photoUrl: productPublicUrl})
+        } else if(newData?.image && cleanProductToSave.photoUrl == null) {            
+            const allowedFileExtensions = [".jpg", ".png", ".jpeg"]
+            // const productImageExtension = allowedFileExtensions.filter(extension => newData?.image?.originalname?.includes(extension))[0]
+            const productImageExtension = allowedFileExtensions.filter(extension => productToSave?.photoUrl?.includes(extension))[0]
+
+            const productImageName = 'photo_'.concat(productToSave.code.replace("#", ''), productImageExtension)
+      
+            await updateProductPhoto(productImageName, newData?.image).then(data => data).catch(error => console.log(error))
+      
+            const productPublicUrl = getPublicProductPhotoUrl(productImageName)
+      
+            result = await this.repository.update(productId, {...productToSave, photoUrl: productPublicUrl})
+
+        } else {
+            result = await this.repository.update(productId, productToSave)
+        }
+
+        return result
     }
 
-    static delete(id: string) {
-
+    static async delete(id: string) {
+        return await this.repository.delete(id)
     }
 }
 

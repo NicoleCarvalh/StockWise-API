@@ -2,6 +2,7 @@ import {Product, PrismaClient} from "@prisma/client"
 import { InputJsonValue } from "@prisma/client/runtime/library"
 
 type ProductDTO = Omit<Product, 'id'> & { technicalDetails: InputJsonValue }
+type ProductUpdateDTO = Omit<Product, 'id' | 'companyId'> & { technicalDetails: InputJsonValue }
 
 abstract class ProductRepository {
   static prismaClient = new PrismaClient().product
@@ -26,7 +27,7 @@ abstract class ProductRepository {
     }})
   }
 
-  static update(id: string, newData: ProductDTO) {
+  static update(id: string, newData: ProductUpdateDTO) {
     return ProductRepository.prismaClient.update({where: {
       id
     }, data: newData})

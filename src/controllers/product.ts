@@ -6,12 +6,29 @@ import { ProductService } from "../services/product.ts";
 
 const ProductRouter = Router()
 
-function getProduct(request: Request, response: Response) {
-  response.json("Rota de teste com o método GET");
+async function getProduct(request: Request, response: Response) {
+  response.json(await ProductService.getAll());
 }
 
-function putProduct(request: Request, response: Response) {
-  response.json("Rota de teste com o método PUT");
+async function putProduct(request: Request, response: Response) {
+  console.log(request.body)
+  const id = request.body?.id
+  const productNewData = request.body
+
+  const productFormData = {
+    ...productNewData, 
+    purchasePrice: Number.parseFloat(productNewData.purchasePrice),
+    salePrice: Number.parseFloat(productNewData.salePrice),
+    quantityInStock: Number.parseInt(productNewData.quantityInStock),
+    technicalDetails: { 
+      width: JSON.parse(productNewData?.technicalDetails)?.width ?? 0, 
+      height: JSON.parse(productNewData?.technicalDetails)?.height ?? 0, 
+      length: JSON.parse(productNewData?.technicalDetails)?.length ?? 0,
+      weight: JSON.parse(productNewData?.technicalDetails)?.weight ?? 0 
+    },
+    image: request.file
+  }
+  response.json(await ProductService.update(id, productFormData));
 }
 
 async function postProduct(request: Request, response: Response) {
@@ -26,7 +43,7 @@ async function postProduct(request: Request, response: Response) {
       width: JSON.parse(receivedData?.technicalDetails)?.width ?? 0, 
       height: JSON.parse(receivedData?.technicalDetails)?.height ?? 0, 
       length: JSON.parse(receivedData?.technicalDetails)?.length ?? 0,
-      weigh: JSON.parse(receivedData?.technicalDetails)?.weigh ?? 0 
+      weight: JSON.parse(receivedData?.technicalDetails)?.weight ?? 0 
     },
     image: request.file
   }
@@ -40,13 +57,16 @@ async function postProduct(request: Request, response: Response) {
   response.status(200).json(await ProductService.create(companyId, productFormData));
 }
 
-function deleteProduct(request: Request, response: Response) {
-  response.json("Rota de teste com o método DELETE");
+async function deleteProduct(request: Request, response: Response) {
+  const id = request.params.id
+  console.log("AQUI")
+  console.log(id)
+  response.json(await ProductService.delete(id));
 }
 
 ProductRouter.get("/", getProduct)
-ProductRouter.put("/", putProduct)
+ProductRouter.put("/", formFileMapper.single('image'), putProduct)
 ProductRouter.post("/", formFileMapper.single('image'), postProduct)
-ProductRouter.delete("/", deleteProduct)
+ProductRouter.delete("/:id", deleteProduct)
 
 export { ProductRouter };

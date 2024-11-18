@@ -11,11 +11,23 @@ import { VirtualStockRouter } from "./controllers/virtualStock.ts";
 import "dotenv/config";
 import { routerGuardHandler } from "./_auth/routerGuard.ts";
 import cors from "cors"
+import { METHODS } from "http";
 
 const server = express();
 // const whitelist = ['http://localhost:5173', 'http://192.168.18.15:5173']
+// const corsOptions = {
+//   origin: ["http://localhost:5173", "http://192.168.0.11:5173"]
+// }
+
+const whitelist = ['http://192.168.0.11:5173', 'http://localhost:5173']
 const corsOptions = {
-  origin: ["http://localhost:5173"]
+  origin: function (origin: any, callback: any) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
 }
 
 server.use(cors(corsOptions))
