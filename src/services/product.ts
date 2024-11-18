@@ -64,8 +64,12 @@ abstract class ProductService {
         return result
     }
 
-    static async getAll() {
-        return await this.repository.getAll()
+    static async getAll(code?: any) {
+        if(code) {
+            return await this.repository.getAll(code)
+        } else {
+            return await this.repository.getAll()
+        }
     }
 
     static getByEmailAndPassword(email: string, password: string) {

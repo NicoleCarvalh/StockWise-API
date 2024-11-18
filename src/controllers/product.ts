@@ -7,7 +7,11 @@ import { ProductService } from "../services/product.ts";
 const ProductRouter = Router()
 
 async function getProduct(request: Request, response: Response) {
-  response.json(await ProductService.getAll());
+  if(request?.query?.code) {
+    response.json(await ProductService.getAll(request?.query?.code));
+  } else {
+    response.json(await ProductService.getAll());
+  }
 }
 
 async function putProduct(request: Request, response: Response) {
