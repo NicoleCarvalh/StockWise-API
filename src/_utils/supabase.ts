@@ -25,8 +25,6 @@ const updateCompanyPhoto = async (currentFileName: string, newFile: any) => {
 
 
 const uploadProductImages = async (fileName: string, file: any) => {
-    console.log(fileName)
-    console.log(file)
     const {data, error} = await supabase.storage.from('stock_images').upload(`product/${fileName}`, file.buffer, {
         contentType: file.mimetype ?? file.type
     })

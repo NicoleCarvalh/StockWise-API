@@ -94,13 +94,6 @@ abstract class ProductService {
             updatedAt: new Date()
         }
 
-        console.log("newData?.image")
-        console.log(newData?.image)
-
-        console.log("cleanProductToSave.photoUrl")
-        console.log(foundProduct?.photoUrl)
-
-
         if(newData?.image && foundProduct?.photoUrl != null) {
             const allowedFileExtensions = [".jpg", ".png", ".jpeg"]
             const productImageExtension = allowedFileExtensions.filter(extension => newData?.image?.originalname?.includes(extension))[0]

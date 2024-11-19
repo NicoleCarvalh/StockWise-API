@@ -19,7 +19,6 @@ async function getProduct(request: Request, response: Response) {
 }
 
 async function putProduct(request: Request, response: Response) {
-  console.log(request.body)
   const id = request.body?.id
   const productNewData = request.body
 
@@ -67,8 +66,6 @@ async function postProduct(request: Request, response: Response) {
 
 async function deleteProduct(request: Request, response: Response) {
   const id = request.params.id
-  console.log("AQUI")
-  console.log(id)
   response.json(await ProductService.delete(id));
 }
 

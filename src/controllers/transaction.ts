@@ -15,8 +15,6 @@ function putTransaction(request: Request, response: Response) {
 async function postTransaction(request: Request, response: Response) {
   const transaction = request.body
   const companyId = response.locals.companyId
-  console.log("Aqui")
-  console.log(transaction)
   response.json(await TransactionService.create({...transaction, companyId}));
 }
 

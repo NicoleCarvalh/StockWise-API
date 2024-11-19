@@ -11,9 +11,6 @@ abstract class TransactionRepository {
 
   static async create(transaction: TransactionDTO, products: any[]) {
     const productsIds = products.map(order => {return {id: order.product.id}})
-
-    console.log("PRODUCTS IDS")
-    console.log(productsIds);
     
     const savedTransaction = await TransactionRepository.prismaClient.create({data: {...transaction, products: {
       connect: productsIds
