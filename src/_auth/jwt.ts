@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken"
 
 const auth = {
     secret: process.env.SECRET_KEY ?? "StockWise",
-    expires: "1h"
+    expires: "1d"
 }
 
 function signToken(payload: any) {

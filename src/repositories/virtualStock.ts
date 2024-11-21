@@ -4,14 +4,15 @@ type VirtualStockDTO = Omit<VirtualStock, 'id'>
 type VirtualStockUpdateDTO = Omit<VirtualStock, 'id' | 'companyId'>
 
 abstract class VirtualStockRepository {
-  static prismaClient = new PrismaClient().virtualStock
+  // static prismaClient = new PrismaClient().virtualStock
+  static prismaClient = new PrismaClient()
 
   constructor() {}
 
   static async create(virtualStock: VirtualStockDTO, products: any[]) {
     const productsIds = products.map(product => {return {id: product.id}})
     
-    const savedVirtualStock = await VirtualStockRepository.prismaClient.create({data: {...virtualStock, products: {
+    const savedVirtualStock = await VirtualStockRepository.prismaClient.virtualStock.create({data: {...virtualStock, products: {
       connect: productsIds
     }}, include: {
       products: true
@@ -21,7 +22,7 @@ abstract class VirtualStockRepository {
   }
 
   static getAll(companyId: string) {
-    return VirtualStockRepository.prismaClient.findMany({where: {
+    return VirtualStockRepository.prismaClient.virtualStock.findMany({where: {
       companyId
     }, include: {
       products: true
@@ -29,28 +30,40 @@ abstract class VirtualStockRepository {
   }
 
   static getById(id: string) {
-    return VirtualStockRepository.prismaClient.findUnique({where: {
+    return VirtualStockRepository.prismaClient.virtualStock.findUnique({where: {
       id
     }})
   }
 
   static async update(id: string, newData: VirtualStockUpdateDTO, productsIds: {id: string}[]) {
-    console.log("REPOSITORY")
-    console.log(id)
-    console.log(newData)
-    console.log(productsIds)
-    return await VirtualStockRepository.prismaClient.update({where: {
+    return await VirtualStockRepository.prismaClient.virtualStock.update({where: {
       id
     }, data: {
       ...newData,
       products: {
-        connect: productsIds
+        set: productsIds
       }
     }})
   }
 
   static delete(id: string) {
-    return VirtualStockRepository.prismaClient.delete({where: {id}})
+    // return VirtualStockRepository.prismaClient.delete({where: {id}})
+    return VirtualStockRepository.prismaClient.$transaction(async (prisma) => {
+      await prisma.product.updateMany({
+        where: {
+          virtualStocksIds: {has: id}
+        },
+        data: {
+          virtualStocksIds: {set: []}
+        }
+      })
+
+      return prisma.virtualStock.delete({
+        where: {
+          id
+        }
+      })
+    })
   }
 }
 

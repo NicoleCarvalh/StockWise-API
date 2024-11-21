@@ -26,15 +26,8 @@ model Product {
   transactions Transaction[] @relation(fields: [transactionsIds], references: [id])
   transactionsIds        String[]   @db.ObjectId
 
-  // transaction Transaction? @relation(fields: [transactionId], references: [id])
-  // transactionId        String?   @db.ObjectId
-
-
   virtualStocks VirtualStock[] @relation(fields: [virtualStocksIds], references: [id])
   virtualStocksIds        String[]   @db.ObjectId
-
-  // virtualStock VirtualStock? @relation(fields: [virtualStockId], references: [id])
-  // virtualStockId        String?   @db.ObjectId
   
   photoUrl         String?  @db.String
   technicalDetails Json    @db.Json
@@ -54,6 +47,8 @@ model Company {
   category String   @db.String
 
   products Product[]
+  
+
   employees Employee[]
   transactions Transaction[]
   reports Report[]
