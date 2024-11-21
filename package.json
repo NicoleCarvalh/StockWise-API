@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {
+"scripts": {
+    "postinstall": "prisma generate",
+    "build": "tsc",
+    "start": "node dist/server.js",
     "watch": "node --watch server.js",
     "dev": "tsx watch src/server.ts"
   },
