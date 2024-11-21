@@ -64,6 +64,7 @@ const TransactionObjectReceivedValidator = z.object({
     }).url({
         message: "Invalid url!"
     }).nullable(),
+    orders: z.string(),
     createdAt: z.date(),
     companyId: z.string(),
     products: z.array(z.any()),

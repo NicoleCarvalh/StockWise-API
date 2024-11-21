@@ -14,7 +14,8 @@ abstract class TransactionService {
       ...transaction,
       createdAt: new Date(),
       fileUrl: null,
-      productsIds: transaction.products.map(order => {return order.product.id})
+      productsIds: transaction.products.map(order => {return order.product.id}),
+      orders: JSON.stringify(transaction.orders)
     }
 
     const {products, ...cleanFormattedTransaction} = formattedTransaction

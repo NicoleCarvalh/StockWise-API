@@ -80,6 +80,7 @@ model Transaction {
   
   products      Product[] @relation(fields: [productsIds], references: [id])
   productsIds        String[]   @db.ObjectId
+  orders Json
 
   total         Float  
   paymentMethod String   @db.String

@@ -1,18 +1,20 @@
 import {Transaction, PrismaClient} from "@prisma/client"
+import { InputJsonValue } from "@prisma/client/runtime/library"
 
-type TransactionDTO = Omit<Transaction, 'id'>
-type TransactionUpdateDTO = Omit<Transaction, 'id' | 'companyId'>
+// type TransactionDTO = Omit<Transaction, 'id'> & InputJsonValue
+// type TransactionUpdateDTO = Omit<Transaction, 'id' | 'companyId'>
 
 abstract class TransactionRepository {
-  static prismaClient = new PrismaClient().transaction
+  // static prismaClient = new PrismaClient().transaction
+  static prismaClient = new PrismaClient()
   static prismaClient_product = new PrismaClient().product
 
   constructor() {}
 
-  static async create(transaction: TransactionDTO, products: any[]) {
+  static async create(transaction: any, products: any[]) {
     const productsIds = products.map(order => {return {id: order.product.id}})
     
-    const savedTransaction = await TransactionRepository.prismaClient.create({data: {...transaction, products: {
+    const savedTransaction = await TransactionRepository.prismaClient.transaction.create({data: {...transaction, products: {
       connect: productsIds
     }}, include: {
       products: true
@@ -31,7 +33,7 @@ abstract class TransactionRepository {
   }
 
   static getAll(companyId: string) {
-    return TransactionRepository.prismaClient.findMany({where: {
+    return TransactionRepository.prismaClient.transaction.findMany({where: {
       companyId
     }, include: {
       products: true
@@ -39,19 +41,32 @@ abstract class TransactionRepository {
   }
 
   static getById(id: string) {
-    return TransactionRepository.prismaClient.findUnique({where: {
+    return TransactionRepository.prismaClient.transaction.findUnique({where: {
       id
     }})
   }
 
-  static update(id: string, newData: TransactionUpdateDTO) {
-    return TransactionRepository.prismaClient.update({where: {
+  static update(id: string, newData: any) {
+    return TransactionRepository.prismaClient.transaction.update({where: {
       id
     }, data: newData})
   }
 
   static delete(id: string) {
-    return TransactionRepository.prismaClient.delete({where: {id}})
+    return TransactionRepository.prismaClient.$transaction(async (prisma) => {
+      await prisma.product.updateMany({
+        where: {
+          transactionsIds: {has: id}
+        },
+        data: {
+          transactionsIds: {set: []}
+        }
+      })
+
+      return prisma.transaction.delete({
+        where: {id}
+      })
+    })
   }
 }
 
