@@ -1,13 +1,13 @@
 import express from "express";
 import { json } from "express";
 import { Request, Response } from "express";
-import { CompanyRouter } from "./controllers/company.ts";
-import { EmployeeRouter } from "./controllers/employee.ts";
-import { ProductRouter } from "./controllers/product.ts";
-import { ReportRouter } from "./controllers/report.ts";
-import { TransactionRouter } from "./controllers/transaction.ts";
-import { VirtualStockRouter } from "./controllers/virtualStock.ts";
-import { routerGuardHandler } from "./_auth/routerGuard.ts";
+import { CompanyRouter } from "./controllers/company.js";
+import { EmployeeRouter } from "./controllers/employee.js";
+import { ProductRouter } from "./controllers/product.js";
+import { ReportRouter } from "./controllers/report.js";
+import { TransactionRouter } from "./controllers/transaction.js";
+import { VirtualStockRouter } from "./controllers/virtualStock.js";
+import { routerGuardHandler } from "./_auth/routerGuard.js";
 import "dotenv/config";
 import cors from "cors";
 

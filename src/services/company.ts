@@ -1,7 +1,7 @@
 import { Company } from "@prisma/client"
-import { CompanyRepository } from "../repositories/company.ts"
-import { CompanyFormDataType } from "../_validations/Company.ts"
-import { getPublicCompanyPhotoUrl, updateCompanyPhoto, uploadCompanyPhoto } from "../_utils/supabase.ts"
+import { CompanyRepository } from "../repositories/company.js"
+import { CompanyFormDataType } from "../_validations/Company.js"
+import { getPublicCompanyPhotoUrl, updateCompanyPhoto, uploadCompanyPhoto } from "../_utils/supabase.js"
 
 type CompanyReceivedDTO = Omit<Company, 'id'>
 type CompanyFormDataReceivedDTO = CompanyFormDataType

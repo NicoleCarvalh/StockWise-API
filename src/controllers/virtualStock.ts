@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Router } from "express";
-import { VirtualStockService } from "../services/virtualStock.ts";
-import { VirtualStockObjectType, VirtualStockObjectValidator } from "../_validations/VirtualStock.ts";
+import { VirtualStockService } from "../services/virtualStock.js";
+import { VirtualStockObjectType, VirtualStockObjectValidator } from "../_validations/VirtualStock.js";
 import { Console } from "console";
 
 const VirtualStockRouter = Router();

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Router } from 'express'
-import { ProductFormDataType, ProductFormDataValidator } from "../_validations/Product.ts";
-import { formFileMapper } from "../_utils/multer.ts";
-import { ProductService } from "../services/product.ts";
+import { ProductFormDataType, ProductFormDataValidator } from "../_validations/Product.js";
+import { formFileMapper } from "../_utils/multer.js";
+import { ProductService } from "../services/product.js";
 
 const ProductRouter = Router()
 

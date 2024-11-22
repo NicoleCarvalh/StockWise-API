@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Router } from 'express'
-import { TransactionService } from "../services/transaction.ts";
+import { TransactionService } from "../services/transaction.js";
 
 const TransactionRouter = Router()
 

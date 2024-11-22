@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "./jwt.ts";
-import { CompanyService } from "../services/company.ts";
+import { verifyToken } from "./jwt.js";
+import { CompanyService } from "../services/company.js";
 
 function routerGuardHandler(request: Request, response: Response, next: NextFunction) {
     const free_paths = [

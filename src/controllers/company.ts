@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { Router } from "express";
-import { CompanyService } from "../services/company.ts";
-import { CompanyUpdateDataValidator, CompanyCredentialsValidator, CompanyFormDataValidator, CompanyFormDataType } from "../_validations/Company.ts";
-import { signToken } from "../_auth/jwt.ts";
-import { formFileMapper } from "../_utils/multer.ts";
+import { CompanyService } from "../services/company.js";
+import { CompanyUpdateDataValidator, CompanyCredentialsValidator, CompanyFormDataValidator, CompanyFormDataType } from "../_validations/Company.js";
+import { signToken } from "../_auth/jwt.js";
+import { formFileMapper } from "../_utils/multer.js";
 
 const CompanyRouter = Router();
 

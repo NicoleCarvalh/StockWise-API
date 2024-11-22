@@ -2,16 +2,16 @@ import { Product } from "@prisma/client";
 import {
   ProductFormDataType,
   ProductToSaveType,
-} from "../_validations/Product.ts";
-import { ProductRepository } from "../repositories/product.ts";
-import { qrCodeFileGenerator } from "../_utils/qrcode.ts";
-import { codeGenerator } from "../_utils/stringGenerator.ts";
+} from "../_validations/Product.js";
+import { ProductRepository } from "../repositories/product.js";
+import { qrCodeFileGenerator } from "../_utils/qrcode.js";
+import { codeGenerator } from "../_utils/stringGenerator.js";
 import { InputJsonValue } from "@prisma/client/runtime/library";
 import {
   getPublicProductPhotoUrl,
   updateProductPhoto,
   uploadProductImages,
-} from "../_utils/supabase.ts";
+} from "../_utils/supabase.js";
 
 type ProductReceivedDTO = Omit<Product, "id"> & {
   technicalDetails: InputJsonValue;

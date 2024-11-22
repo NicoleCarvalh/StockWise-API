@@ -1,6 +1,6 @@
 import { Transaction } from "@prisma/client"
-import { TransactionRepository } from "../repositories/transaction.ts"
-import { TransactionObjectValidator, TransactionObjectType, TransactionObjectReceivedType } from "../_validations/Transaction.ts"
+import { TransactionRepository } from "../repositories/transaction.js"
+import { TransactionObjectValidator, TransactionObjectType, TransactionObjectReceivedType } from "../_validations/Transaction.js"
 
 type TransactionReceivedDTO = Omit<Transaction, 'id'>
 

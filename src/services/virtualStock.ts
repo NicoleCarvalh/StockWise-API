@@ -1,7 +1,7 @@
 import { VirtualStock } from "@prisma/client"
-import { VirtualStockRepository } from "../repositories/virtualStock.ts"
-import { VirtualStockObjectValidator, VirtualStockObjectType, VirtualStockObjectReceivedType } from "../_validations/VirtualStock.ts"
-import { codeGenerator } from "../_utils/stringGenerator.ts"
+import { VirtualStockRepository } from "../repositories/virtualStock.js"
+import { VirtualStockObjectValidator, VirtualStockObjectType, VirtualStockObjectReceivedType } from "../_validations/VirtualStock.js"
+import { codeGenerator } from "../_utils/stringGenerator.js"
 
 type VirtualStockReceivedDTO = Omit<VirtualStock, 'id'>
 
