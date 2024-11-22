@@ -14,7 +14,7 @@ abstract class CompanyService {
   static async create(company: CompanyFormDataReceivedDTO) {
     let result: Company;
     const {image, ...companyWithoutImage} = company // remove image key (selecting it and split in a variable) and create separete the other keys on 'companyWithoutImage'
-    const companyFomated: CompanyReceivedDTO = {...companyWithoutImage, photoUrl: null}
+    const companyFomated: CompanyReceivedDTO = {...companyWithoutImage, photoUrl: null, createdAt: new Date()}
 
     const companyFound = await this.repository.getByEmail(companyFomated.email)
     const companyExists = companyFound != null
@@ -112,11 +112,11 @@ abstract class CompanyService {
       const companyPublicUrl = getPublicCompanyPhotoUrl(newCompanyImageName)
 
       const {image, ...newCompanyDataFiltered} = newData
-      result = await this.repository.update(id, {...newCompanyDataFiltered, photoUrl: companyPublicUrl})
+      result = await this.repository.update(id, {...newCompanyDataFiltered, photoUrl: companyPublicUrl, createdAt: new Date()})
     }
 
     const {image, ...newCompanyDataFiltered} = newData
-    result = this.repository.update(id, {...newCompanyDataFiltered, photoUrl: null}).then(data => data).catch(error => error)
+    result = this.repository.update(id, {...newCompanyDataFiltered, photoUrl: null, createdAt: new Date()}).then(data => data).catch(error => error)
     
     if("error" in result) {
       return {
