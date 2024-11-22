@@ -13,6 +13,7 @@ async function getCompanies(request: Request, response: Response) {
 
 // Unprotected route
 async function getCompanyByCredentials(request: Request, response: Response) {
+  console.log("entrou")
   const { email, password } = request.body
 
   const validations = CompanyCredentialsValidator.safeParse({email, password})

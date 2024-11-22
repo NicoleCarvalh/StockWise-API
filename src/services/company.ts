@@ -52,8 +52,8 @@ abstract class CompanyService {
     return result
   }
 
-  static getAll() {
-    const result = this.repository.getAll().then(data => data).catch(error => error)
+  static async getAll() {
+    const result = await this.repository.getAll().then(data => data).catch(error => error)
     
     if("error" in result) {
       return {
