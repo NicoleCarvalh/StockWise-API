@@ -3,4 +3,30 @@ alt + D -> check
 
 TODOS: 
     ✔ Review all responses and check if them passing statusCode! @done(24-11-12 16:08)
-    
+
+
+[ ] Desenvolver a criação automática de relatórios
+	[ ] Criar um relatório de vendas e estoque conforme os dados do período selecionado
+	[ ] Salvar no supabase o relatório
+	[ ] Listar o relatório na tela de relatórios
+	[ ] Adicionar lógica de clicar no relatório e o download ser efetuado
+
+[ ] Desenvolver o canhoto da empresa nas compras
+	[ ] No cadastro de uma compra serão criados dois arquivos de compra:
+		- Canhoto do cliente
+		- Canhoto da empresa
+	[ ] O canhoto do cliente deve ser enviado por email (sem a necessidade de salvar no banco)
+	[ ] O canhoto da empresa deve ser salvo no banco de dados e disponibilizado no click do botão na lista de compras
+
+[ ] Adicionar um loader no login (useToast com: "Entrando no sistema... só mais alguns segundos" e desabilitar temporariamente o formulário de login)
+
+
+[ ] Atualizar design e informações dinâmicas no perfil
+
+[ ] Adicionar gráficos na Dashboard
+
+
+ 
+
+[ ] Desenvolver a criação de compras (atualização de estoque de produtos que já existem)
+	[ ] ...

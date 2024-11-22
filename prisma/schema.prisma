@@ -45,6 +45,7 @@ model Company {
   password String   @db.String
   photoUrl String?  @db.String
   category String   @db.String
+  createdAt        DateTime @default(now())
 
   products Product[]
   
